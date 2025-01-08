@@ -43,8 +43,6 @@ public class mecanumdrivewheels extends LinearOpMode {
         linearslide1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         linearslide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearslide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        gilfoil.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        gilfoil.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         linearslide1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -114,10 +112,10 @@ public class mecanumdrivewheels extends LinearOpMode {
                 }
                 telemetry.addData("post3", post3);
                 if (Math.abs(cool) > 0.3 && ((post3 < tickRotation3 && post3 > -10000) || (post3 < 10 && cool > 0) || (post3 > tickRotation3 && cool < 0))) {
-                    gilfoil.setVelocity(cool * 6000);
+                    gilfoil.setVelocity(cool * 2800);
                 }
                 else {
-                    gilfoil.setPower(0);
+                    gilfoil.setVelocity(0);
                 }
                 if (gamepad1.options) {
                     odocomputer.recalibrateIMU();
