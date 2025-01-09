@@ -166,7 +166,7 @@ public class redDragAuto extends LinearOpMode {
                 .afterDisp(1, linearSlide.up())
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
-                .strafeToLinearHeading(new Vector2d(50, -60), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(50, -60), Math.toRadians(90))
                 .afterDisp(3, linearSlide.down());
         Action traj1 = trajectory.build();
         waitForStart();
