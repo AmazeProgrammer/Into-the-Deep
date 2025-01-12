@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.RoadRunner;
 
-import static org.firstinspires.ftc.teamcode.variable.x;
+import static org.firstinspires.ftc.teamcode.RoadRunner.variable.x;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
