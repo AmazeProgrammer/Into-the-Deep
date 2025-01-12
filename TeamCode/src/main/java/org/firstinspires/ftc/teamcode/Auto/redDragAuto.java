@@ -10,11 +10,11 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
@@ -33,12 +33,12 @@ public class redDragAuto extends LinearOpMode {
             return new Action() {
                 private boolean atPosition = false;
                 private int currentPosition;
-                private int position = 3500;
+                private int position = 4100;
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
                     linearSlide.setTargetPosition(position);
                     linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    linearSlide.setVelocity(6000);
+                    linearSlide.setVelocity(10000);
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
@@ -52,12 +52,12 @@ public class redDragAuto extends LinearOpMode {
             return new Action() {
                 private boolean atPosition = false;
                 private int currentPosition;
-                private int position = 2700;
+                private int position = 2000;
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
                     linearSlide.setTargetPosition(position);
                     linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    linearSlide.setVelocity(6000);
+                    linearSlide.setVelocity(10000);
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
@@ -76,7 +76,7 @@ public class redDragAuto extends LinearOpMode {
                 public boolean run(@NonNull TelemetryPacket packet) {
                     linearSlide.setTargetPosition(position);
                     linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    linearSlide.setVelocity(6000);
+                    linearSlide.setVelocity(10000);
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
@@ -88,16 +88,16 @@ public class redDragAuto extends LinearOpMode {
         }
     }
     public class claw {
-        private Servo claw;
+        private CRServo claw;
         public claw(HardwareMap hardwareMap){
-            claw = hardwareMap.get(Servo.class, "jackismadidk");
+            claw = hardwareMap.get(CRServo.class, "jackismadidk");
         }
         public Action setPosition(float pos) {
             return new Action() {
                 private boolean atPosition = true;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    claw.setPosition(pos);
+                    claw.setPower(pos);
                     return atPosition;
                 }
             };
@@ -107,7 +107,7 @@ public class redDragAuto extends LinearOpMode {
                 private boolean atPosition = true;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    claw.setPosition(0.6);
+                    claw.setPower(-1);
                     return atPosition;
                 }
             };
@@ -117,7 +117,17 @@ public class redDragAuto extends LinearOpMode {
                 private boolean atPosition = true;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    claw.setPosition(0.4);
+                    claw.setPower(1);
+                    return atPosition;
+                }
+            };
+        }
+        public Action stop() {
+            return new Action() {
+                private boolean atPosition = true;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    claw.setPower(0);
                     return atPosition;
                 }
             };
@@ -125,16 +135,17 @@ public class redDragAuto extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPose = new Pose2d(31.1875, -63.5, Math.toRadians(90));
+        Pose2d startingPose = new Pose2d(7.1875, -63.5, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPose);
         claw claw = new claw(hardwareMap);
         linearSlide linearSlide = new linearSlide(hardwareMap);
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startingPose)
                 .afterDisp(0.001, linearSlide.up())
-                .strafeToLinearHeading(new Vector2d(0, -32.5), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(-5, -30), Math.toRadians(180))
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
                 .stopAndAdd(linearSlide.up())
+                .stopAndAdd(claw.stop())
                 .strafeToConstantHeading(new Vector2d(6, -36))
                 .afterDisp(3, linearSlide.down())
                 .splineToSplineHeading(new Pose2d(38, -17, Math.toRadians(0)), Math.toRadians(90))
@@ -152,24 +163,28 @@ public class redDragAuto extends LinearOpMode {
                 .afterDisp(1, linearSlide.up())
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
+                .stopAndAdd(claw.stop())
                 .strafeToLinearHeading(new Vector2d(53.5, -63), Math.toRadians(0))
                 .afterDisp(3, linearSlide.down())
                 .strafeToLinearHeading(new Vector2d(6, -32.5), Math.toRadians(180))
                 .afterDisp(1, linearSlide.up())
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
+                .stopAndAdd(claw.stop())
                 .strafeToLinearHeading(new Vector2d(53.5, -63), Math.toRadians(0))
                 .afterDisp(3, linearSlide.down())
                 .strafeToLinearHeading(new Vector2d(-2, -32.5), Math.toRadians(180))
                 .afterDisp(1, linearSlide.up())
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
+                .stopAndAdd(claw.stop())
                 .strafeToLinearHeading(new Vector2d(53.5, -63), Math.toRadians(0))
                 .afterDisp(3, linearSlide.down())
                 .strafeToLinearHeading(new Vector2d(-4, -32.5), Math.toRadians(180))
                 .afterDisp(1, linearSlide.up())
                 .stopAndAdd(linearSlide.middle())
                 .stopAndAdd(claw.open())
+                .stopAndAdd(claw.stop())
                 .strafeToLinearHeading(new Vector2d(45, -54), Math.toRadians(90))
                 .afterDisp(3, linearSlide.down());
         Action traj1 = trajectory.build();

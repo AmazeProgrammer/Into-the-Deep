@@ -6,16 +6,16 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "wow what an amazing day")
 public class mecanumdrivewheels extends LinearOpMode {
     //Initializing hardware
     private DcMotor leftFront, rightFront, leftBack, rightBack;
     private DcMotorEx linearslide1, gilfoil, linearslide2;
-    private CRServo lagrangepoints;
-    private Servo jackismadidk;
+    private CRServo lagrangepoints, jackismadidk;
     private GoBildaPinpointDriver odocomputer;
+    private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
         //Initializing variables
@@ -31,7 +31,7 @@ public class mecanumdrivewheels extends LinearOpMode {
         lagrangepoints = hardwareMap.get(CRServo.class, "lagrangepoints");
         gilfoil = hardwareMap.get(DcMotorEx.class, "gilfoil");
         linearslide2 = hardwareMap.get(DcMotorEx.class,"linearslide2");
-        jackismadidk = hardwareMap.get(Servo.class, "jackismadidk");
+        jackismadidk = hardwareMap.get(CRServo.class, "jackismadidk");
         odocomputer = hardwareMap.get(GoBildaPinpointDriver.class, "odocomputer");
         odocomputer.resetPosAndIMU();
         linearslide1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -42,7 +42,7 @@ public class mecanumdrivewheels extends LinearOpMode {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         linearslide1.setDirection(DcMotorSimple.Direction.REVERSE);
         linearslide2.setDirection(DcMotorSimple.Direction.REVERSE);
-        jackismadidk.setDirection(Servo.Direction.REVERSE);
+        jackismadidk.setDirection(CRServo.Direction.REVERSE);
         waitForStart();
         if (isStopRequested()) return;
         if (opModeIsActive()) {
@@ -59,12 +59,17 @@ public class mecanumdrivewheels extends LinearOpMode {
                     lagrangepoints.setPower(0);
                 }
                 if (gamepad2.y) {
-                    jackismadidk.setPosition(0.5);
+                    runtime.reset();
+                    jackismadidk.setPower(1);
                 }
                 else if (gamepad2.a) {
-                    jackismadidk.setPosition(0.4);
+                    runtime.reset();
+                    jackismadidk.setPower(-1);
                 }
-                telemetry.addData("jackismadidk", jackismadidk.getPosition());
+                if (runtime.seconds() > 0.5) {
+                    jackismadidk.setPower(0);
+                }
+                telemetry.addData("jackismadidk", jackismadidk.getPower());
                 //Linear Slide
                 post = linearslide1.getCurrentPosition();
                 telemetry.addData("post", post);
@@ -85,10 +90,10 @@ public class mecanumdrivewheels extends LinearOpMode {
                 }
                 post2 = linearslide2.getCurrentPosition();
                 telemetry.addData("post2", post2);
-                if (-gamepad2.right_stick_y != 0 && ((post2 < tickRotation2 && post2 > 30) || (post2 < 30 && -gamepad2.right_stick_y > 0) || (post2 > tickRotation2 && -gamepad2.right_stick_y < 0))) {
+                if (-gamepad2.right_stick_y != 0 && ((post2 < tickRotation2 && post2 > 10) || (post2 < 10 && -gamepad2.right_stick_y > 0) || (post2 > tickRotation2 && -gamepad2.right_stick_y < 0))) {
                     linearslide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     linearslide2.setPower(-gamepad2.right_stick_y);
-                } else if (post2 > 30) {
+                } else if (post2 > 10) {
                     linearslide2.setPower(0);
                     linearslide2.setTargetPosition(post2);
                     linearslide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -112,8 +117,8 @@ public class mecanumdrivewheels extends LinearOpMode {
                 else {
                     gilfoil.setVelocity(0);
                 }
-                if (gamepad1.options) {
-                    odocomputer.recalibrateIMU();
+                if (gamepad1.left_bumper) {
+                    odocomputer.resetPosAndIMU();
                 }
                 double botHeading = odocomputer.getHeading();
                 y = -gamepad1.left_stick_y;

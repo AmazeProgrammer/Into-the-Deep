@@ -18,7 +18,7 @@ public class MeepMeepTesting {
                 .setDriveTrainType(DriveTrainType.MECANUM)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(31.1875, -63.5, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(7.1875, -63.5, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(0, -32.5), Math.toRadians(180))
                 .strafeToConstantHeading(new Vector2d(6, -36))
                 .splineToSplineHeading(new Pose2d(38, -17, Math.toRadians(0)), Math.toRadians(90))
