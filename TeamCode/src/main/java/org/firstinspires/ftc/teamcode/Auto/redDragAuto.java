@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
@@ -31,7 +32,7 @@ public class redDragAuto extends LinearOpMode {
         }
         public Action up() {
             return new Action() {
-                private boolean atPosition = false;
+                private boolean atPosition = true;
                 private int currentPosition;
                 private int position = 4100;
                 @Override
@@ -42,7 +43,7 @@ public class redDragAuto extends LinearOpMode {
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
-                        atPosition = true;
+                        atPosition = false;
                     }
                     return atPosition;
                 }
@@ -50,7 +51,7 @@ public class redDragAuto extends LinearOpMode {
         }
         public Action middle() {
             return new Action() {
-                private boolean atPosition = false;
+                private boolean atPosition = true;
                 private int currentPosition;
                 private int position = 2000;
                 @Override
@@ -61,7 +62,7 @@ public class redDragAuto extends LinearOpMode {
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
-                        atPosition = true;
+                        atPosition = false;
                     }
                     return atPosition;
                 }
@@ -69,7 +70,7 @@ public class redDragAuto extends LinearOpMode {
         }
         public Action down() {
             return new Action() {
-                private boolean atPosition = false;
+                private boolean atPosition = true;
                 private int currentPosition;
                 private int position = 0;
                 @Override
@@ -80,7 +81,7 @@ public class redDragAuto extends LinearOpMode {
                     currentPosition = linearSlide.getCurrentPosition();
                     packet.put("currentPosition", currentPosition);
                     if (currentPosition == position) {
-                        atPosition = true;
+                        atPosition = false;
                     }
                     return atPosition;
                 }
@@ -95,9 +96,11 @@ public class redDragAuto extends LinearOpMode {
         public Action setPosition(float pos) {
             return new Action() {
                 private boolean atPosition = true;
+                ElapsedTime time = new ElapsedTime();
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     claw.setPower(pos);
+                    if (time.seconds() > 0.2) {atPosition = false;}
                     return atPosition;
                 }
             };
@@ -105,9 +108,11 @@ public class redDragAuto extends LinearOpMode {
         public Action open() {
             return new Action() {
                 private boolean atPosition = true;
+                ElapsedTime time = new ElapsedTime();
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     claw.setPower(-1);
+                    if (time.seconds() > 0.2) {atPosition = false;}
                     return atPosition;
                 }
             };
@@ -118,13 +123,15 @@ public class redDragAuto extends LinearOpMode {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     claw.setPower(1);
+                    ElapsedTime time = new ElapsedTime();
+                    if (time.seconds() > 0.2) {atPosition = false;}
                     return atPosition;
                 }
             };
         }
         public Action stop() {
             return new Action() {
-                private boolean atPosition = true;
+                private boolean atPosition = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     claw.setPower(0);
