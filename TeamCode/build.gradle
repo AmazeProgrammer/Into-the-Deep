@@ -40,4 +40,8 @@ dependencies {
     implementation "dev.frozenmilk.dairy:Util:1.1.0"
     implementation "dev.frozenmilk.dairy:Core:1.0.1"
     implementation "dev.frozenmilk.mercurial:Mercurial:1.0.2"
+    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.21'
 }
