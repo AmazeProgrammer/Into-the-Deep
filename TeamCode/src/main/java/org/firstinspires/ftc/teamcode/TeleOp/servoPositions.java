@@ -14,6 +14,8 @@ public class servoPositions {
     static double turnBackServoBack = 0;
     static double turnBackServoNormal = 0;
     static double turnFrontServoUp = 0;
+    static double rotatingServoPosition1 = 0;
+    static double rotatingServoPosition2 = 0;
     static int tickRotation3 = 4200;
     static int tickRotation2 = 6000;
 }
