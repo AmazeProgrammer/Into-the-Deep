@@ -4,14 +4,12 @@ import static org.firstinspires.ftc.teamcode.TeleOp.servoPositions.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import org.firstinspires.ftc.teamcode.TeleOp.servoPositions;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "wow what an amazing day")
+@TeleOp(name = "quick")
 public class quick extends LinearOpMode {
     //Initializing hardware
     private DcMotor leftFront, rightFront, leftBack, rightBack;
