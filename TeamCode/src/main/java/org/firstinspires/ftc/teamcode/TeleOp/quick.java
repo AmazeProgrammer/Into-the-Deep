@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class quick extends LinearOpMode {
     //Initializing hardware
     private DcMotor leftFront, rightFront, leftBack, rightBack;
-    private DcMotorEx linearslide1, linearslide2, linearslide3, linearslide4;
-    private Servo frontServo1, frontServo2, backServo1, backServo2, turnFrontServo, turnBackServo, rotatingServo;
+    private DcMotorEx linearslide1, linearslide2, linearslide3, linearslide4, turnBackServo;
+    private Servo frontServo1, frontServo2, backServo1, backServo2, turnFrontServo, rotatingServo;
     private GoBildaPinpointDriver odocomputer;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -35,8 +35,7 @@ public class quick extends LinearOpMode {
         backServo1 = hardwareMap.get(Servo.class, "backServo1");
         backServo2 = hardwareMap.get(Servo.class, "backServo2");
         turnFrontServo = hardwareMap.get(Servo.class, "turnFrontServo");
-        turnBackServo = hardwareMap.get(Servo.class, "turnBackServo");
-        turnBackServo = hardwareMap.get(Servo.class, "turnBackServo");
+        turnBackServo = hardwareMap.get(DcMotorEx.class, "turnBackServo");
         rotatingServo = hardwareMap.get(Servo.class, "rotatingServo");
         odocomputer = hardwareMap.get(GoBildaPinpointDriver.class, "odocomputer");
         odocomputer.resetPosAndIMU();
@@ -111,13 +110,17 @@ public class quick extends LinearOpMode {
                     turnFrontServo.setPosition(turnFrontServoUp);
                 }
                 if (gamepad2.dpad_up) {
-                    turnBackServo.setPosition(turnBackServoBack);
+                    turnBackServo.setTargetPosition(turnBackServoBack);
+                    turnBackServo.setVelocity(700);
                 } else if (gamepad2.dpad_down) {
-                    turnBackServo.setPosition(turnBackServoNormal);
+                    turnBackServo.setTargetPosition(turnBackServoNormal);
+                    turnBackServo.setVelocity(700);
                 } else if (gamepad2.dpad_right) {
-                    turnBackServo.setPosition(turnBackServoSpecimenFront);
+                    turnBackServo.setTargetPosition(turnBackServoSpecimenFront);
+                    turnBackServo.setVelocity(700);
                 } else if (gamepad2.dpad_left) {
-                    turnBackServo.setPosition(turnBackServoSpecimenBack);
+                    turnBackServo.setTargetPosition(turnBackServoSpecimenBack);
+                    turnBackServo.setVelocity(700);
                 }
                 if (gamepad2.right_bumper) {
                     rotatingServo.setPosition(rotatingServoPosition1);

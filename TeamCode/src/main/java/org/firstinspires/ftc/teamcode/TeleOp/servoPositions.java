@@ -9,11 +9,11 @@ public class servoPositions {
     static double frontServoClose = 0;
     static double backServoClose = 0;
     static double turnFrontServoDown = 0;
-    static double turnBackServoSpecimenBack = 0;
-    static double turnBackServoSpecimenFront = 0;
-    static double turnBackServoBack = 0;
-    static double turnBackServoNormal = 0;
-    static double turnFrontServoUp = 0;
+    static int turnBackServoSpecimenBack = 0;
+    static int turnBackServoSpecimenFront = 0;
+    static int turnBackServoBack = 0;
+    static int turnBackServoNormal = 0;
+    static int turnFrontServoUp = 0;
     static double rotatingServoPosition1 = 0;
     static double rotatingServoPosition2 = 0;
     static int tickRotation3 = 4200;
