@@ -18,7 +18,6 @@ public class servoPositions {
     public static int turnBackServoSpecimenFront = 0;
     public static int turnBackServoBucket = 0;
     public static int turnBackServoNormal = 0;
-    public static int armUp = 0;
     public static int armSpecimenBack = 0;
     public static int armSpecimenFront = 0;
     public static int armBucket = 0;
