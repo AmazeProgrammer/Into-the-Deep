@@ -67,9 +67,9 @@ public class testingServos extends LinearOpMode {
                     backServoRight.setPosition(backServoRightOpen);
                 }
                 if (gamepad1.y) {
-                    turnFrontServo.setPosition(turnFrontServoDown);
-                } else if (gamepad1.a) {
                     turnFrontServo.setPosition(turnFrontServoUp);
+                } else if (gamepad1.a) {
+                    turnFrontServo.setPosition(turnFrontServoDown);
                 }
                 if (gamepad2.dpad_up) {
                     arm.setTargetPosition(armBucket);
@@ -94,6 +94,7 @@ public class testingServos extends LinearOpMode {
                 else if (gamepad2.left_bumper) {
                     rotatingServo.setPosition(rotatingServoPosition180);
                 }
+                telemetry.addData("arm", arm.getCurrentPosition());
                 telemetry.update();
             }
         }

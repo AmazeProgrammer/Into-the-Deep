@@ -12,8 +12,8 @@ public class servoPositions {
     public static double backServoLeftOpen = 0.48;
     public static double backServoRightClose = 0;
     public static double backServoLeftClose = 0.37;
-    public static double turnFrontServoDown = 0;
-    public static double turnFrontServoUp = 0;
+    public static double turnFrontServoDown = 1;
+    public static double turnFrontServoUp = 0.2;
     public static int turnBackServoSpecimenBack = 0;
     public static int turnBackServoSpecimenFront = 0;
     public static int turnBackServoBucket = 0;
