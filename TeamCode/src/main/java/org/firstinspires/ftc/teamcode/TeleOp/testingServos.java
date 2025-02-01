@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "what")
+@TeleOp(name = "ok")
 public class testingServos extends LinearOpMode {
     //Initializing hardware
     private DcMotorEx arm;
@@ -72,20 +72,12 @@ public class testingServos extends LinearOpMode {
                     turnFrontServo.setPosition(turnFrontServoDown);
                 }
                 if (gamepad2.dpad_up) {
-                    arm.setTargetPosition(armBucket);
-                    arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoBucket);
                 } else if (gamepad2.dpad_down) {
-                    arm.setTargetPosition(armNormal);
-                    arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoNormal);
                 } else if (gamepad2.dpad_right) {
-                    arm.setTargetPosition(armSpecimenFront);
-                    arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoSpecimenFront);
                 } else if (gamepad2.dpad_left) {
-                    arm.setTargetPosition(armSpecimenBack);
-                    arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoSpecimenBack);
                 }
                 if (gamepad2.right_bumper) {

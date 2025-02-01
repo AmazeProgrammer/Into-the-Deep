@@ -76,6 +76,11 @@ public class quick extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
         if (opModeIsActive()) {
+            arm.setTargetPosition(armNormal);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm.setVelocity(700);
+            turnBackServo.setPosition(turnBackServoNormal);
+            rotatingServo.setPosition(rotatingServoPositionNormal);
             while(opModeIsActive()) {
                 odocomputer.update();
                 post = linearslide1.getCurrentPosition();
@@ -118,27 +123,35 @@ public class quick extends LinearOpMode {
                     backServoLeft.setPosition(backServoLeftOpen);
                     backServoRight.setPosition(backServoRightOpen);
                 }
-                if (post > 1500) {
+                if (post > 1000) {
                     turnFrontServo.setPosition(turnFrontServoDown);
-                } else if (post < 1000) {
+                } else if (post < 500) {
                     turnFrontServo.setPosition(turnFrontServoUp);
                 }
                 if (gamepad2.dpad_up) {
                     arm.setTargetPosition(armBucket);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoBucket);
+                    rotatingServo.setPosition(rotatingServoPositionNormal);
                 } else if (gamepad2.dpad_down) {
                     arm.setTargetPosition(armNormal);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoNormal);
+                    rotatingServo.setPosition(rotatingServoPositionNormal);
                 } else if (gamepad2.dpad_right) {
                     arm.setTargetPosition(armSpecimenFront);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoSpecimenFront);
+                    rotatingServo.setPosition(rotatingServoPosition180);
                 } else if (gamepad2.dpad_left) {
                     arm.setTargetPosition(armSpecimenBack);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setVelocity(700);
                     turnBackServo.setPosition(turnBackServoSpecimenBack);
+                    rotatingServo.setPosition(rotatingServoPositionNormal);
                 }
                 if (gamepad2.right_bumper) {
                     rotatingServo.setPosition(rotatingServoPositionNormal);
