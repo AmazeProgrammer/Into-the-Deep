@@ -47,7 +47,6 @@ public class quick extends LinearOpMode {
         linearslide3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearslide3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //Reversing
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -73,18 +72,21 @@ public class quick extends LinearOpMode {
         if (rotatingServoReverse) {
             rotatingServo.setDirection(Servo.Direction.REVERSE);
         }
+        boolean dpadup = false;
+        boolean dpaddown = false;
+        boolean dpadleft = false;
+        boolean dpadright= false;
         waitForStart();
         if (isStopRequested()) return;
         if (opModeIsActive()) {
-            arm.setTargetPosition(armNormal);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setVelocity(700);
-            turnBackServo.setPosition(turnBackServoNormal);
+            turnBackServo.setPosition(0);
             rotatingServo.setPosition(rotatingServoPositionNormal);
+            backServoLeft.setPosition(backServoLeftOpen);
+            backServoRight.setPosition(backServoRightOpen);
             while(opModeIsActive()) {
                 odocomputer.update();
                 post = linearslide1.getCurrentPosition();
-                if (-gamepad2.left_stick_y != 0 && ((post < tickRotation2 && post > 10) || (post < 10 && -gamepad2.right_stick_y > 0) || (post > tickRotation2 && -gamepad2.right_stick_y < 0))) {
+                if (-gamepad2.left_stick_y != 0 && ((post < tickRotation2 && post >= 0) || (post < 0 && -gamepad2.left_stick_y > 0) || (post >= tickRotation2 && -gamepad2.left_stick_y < 0))) {
                     linearslide1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     linearslide1.setPower(-gamepad2.left_stick_y);
                 } else if (post > 10) {
@@ -94,7 +96,7 @@ public class quick extends LinearOpMode {
                     linearslide1.setVelocity(700);
                 }
                 post2 = linearslide3.getCurrentPosition();
-                if (-gamepad2.right_stick_y != 0 && ((post2 < tickRotation3 && post2 > 10) || (post2 < 10 && -gamepad2.right_stick_y > 0) || (post2 > tickRotation3 && -gamepad2.right_stick_y < 0))) {
+                if (-gamepad2.right_stick_y != 0 && ((post2 < tickRotation3 && post2 >= 0) || (post2 < 0 && -gamepad2.right_stick_y > 0) || (post2 >= tickRotation3 && -gamepad2.right_stick_y < 0))) {
                     linearslide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     linearslide3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     linearslide3.setPower(-gamepad2.right_stick_y);
@@ -131,27 +133,37 @@ public class quick extends LinearOpMode {
                 if (gamepad2.dpad_up) {
                     arm.setTargetPosition(armBucket);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(700);
+                    arm.setVelocity(1000);
                     turnBackServo.setPosition(turnBackServoBucket);
                     rotatingServo.setPosition(rotatingServoPositionNormal);
                 } else if (gamepad2.dpad_down) {
                     arm.setTargetPosition(armNormal);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(700);
+                    arm.setVelocity(1000);
                     turnBackServo.setPosition(turnBackServoNormal);
                     rotatingServo.setPosition(rotatingServoPositionNormal);
                 } else if (gamepad2.dpad_right) {
                     arm.setTargetPosition(armSpecimenFront);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(700);
+                    arm.setVelocity(1000);
                     turnBackServo.setPosition(turnBackServoSpecimenFront);
                     rotatingServo.setPosition(rotatingServoPosition180);
                 } else if (gamepad2.dpad_left) {
                     arm.setTargetPosition(armSpecimenBack);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(700);
+                    arm.setVelocity(1000);
                     turnBackServo.setPosition(turnBackServoSpecimenBack);
                     rotatingServo.setPosition(rotatingServoPositionNormal);
+                }
+                if (gamepad2.right_trigger > 0.3) {
+                    arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    arm.setPower(gamepad2.right_trigger);
+                } else if (gamepad2.left_trigger > 0.3) {
+                    arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    arm.setPower(-gamepad2.left_trigger);
+                }
+                if (gamepad2.options) {
+                    turnBackServo.setPosition(0);
                 }
                 if (gamepad2.right_bumper) {
                     rotatingServo.setPosition(rotatingServoPositionNormal);
