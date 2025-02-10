@@ -9,8 +9,8 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class firstPipline extends OpenCvPipeline {
     private String location = "nothing"; // output
-    public Scalar lower = new Scalar(0, 0, 0); // HSV threshold bounds
-    public Scalar upper = new Scalar(255, 255, 255);
+    public Scalar lower = new Scalar(10, 100, 20); // HSV threshold bounds
+    public Scalar upper = new Scalar(20, 255, 255);
 
     private Mat hsvMat = new Mat(); // converted image
     private Mat binaryMat = new Mat(); // imamge analyzed after thresholding
@@ -20,9 +20,7 @@ public class firstPipline extends OpenCvPipeline {
     private Point topLeft1 = new Point(10, 0), bottomRight1 = new Point(40, 20);
     private Point topLeft2 = new Point(10, 0), bottomRight2 = new Point(40, 20);
 
-    public firstPipline() {
-
-    }
+    public firstPipline() {}
 
     @Override
     public Mat processFrame(Mat input) {
@@ -58,7 +56,6 @@ public class firstPipline extends OpenCvPipeline {
         } else if (w1 < w2) {
             location = "2";
         }
-
         return binaryMat;
     }
 
