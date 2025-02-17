@@ -1,23 +1,29 @@
 package org.firstinspires.ftc.teamcode.OpMode.Testing;
 
+import android.util.Size;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.util.OpenCV.Camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
 
-@TeleOp(name = "SampleCameraOpMode", group = "Testing")
+@Autonomous(name="Vision Test")
 public class SampleCameraOpMode extends LinearOpMode {
-    Camera camera = new Camera(hardwareMap);
+
+    private VisionPortal portal;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        camera.switchToFirstPipeline();
-        telemetry.addLine("Status: Initialized");
+
+        portal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(640, 480))
+                .setCamera(BuiltinCameraDirection.BACK)
+                .build();
+
+
         waitForStart();
-        while (opModeIsActive()) {
-            // OpMode receives the information transmitted from the pipeline class
-            // to the camera module class.
-            telemetry.addLine(camera.getPiplineLocation());
-            telemetry.update();
-        }
     }
 }
