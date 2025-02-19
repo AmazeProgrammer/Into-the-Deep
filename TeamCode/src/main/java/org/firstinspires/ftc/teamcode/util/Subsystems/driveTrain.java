@@ -21,9 +21,10 @@ import dev.frozenmilk.mercurial.subsystems.Subsystem;
 import kotlin.annotation.MustBeDocumented;
 
 public class driveTrain implements Subsystem {
-    public static GoBildaPinpointDriver imu;
-    public static DcMotor[] motor = new DcMotor[4];
+    private static GoBildaPinpointDriver imu;
+    private static DcMotor[] motor = new DcMotor[4];
     public static final driveTrain INSTANCE = new driveTrain();
+    private static boolean driveFieldCentric = true;
 
     private driveTrain() { }
 
@@ -54,24 +55,15 @@ public class driveTrain implements Subsystem {
         imu.resetPosAndIMU();
         setDefaultCommand(drive());
     }
-    @Override
-    public void preUserInitLoopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void preUserLoopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void postUserInitLoopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void postUserLoopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void preUserStopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void postUserStopHook(@NonNull Wrapper opMode) {}
-    @Override
-    public void cleanup(@NonNull Wrapper opMode) {}
     public static Lambda drive() {
         return new Lambda("drive")
                 .addRequirements(INSTANCE)
-                .addExecute(driveTrain::driveUpdate);
+                .setExecute(driveTrain::driveUpdate);
+    }
+    public static Lambda switchDrive() {
+        return new Lambda("driveRobotCentric")
+                .addRequirements(INSTANCE)
+                .setInit(() -> driveFieldCentric = !driveFieldCentric);
     }
     public static Lambda resetHeading() {
         return new Lambda("resetHeading")
@@ -79,21 +71,29 @@ public class driveTrain implements Subsystem {
                 .setInit(() -> imu.resetPosAndIMU());
     }
     public static void driveUpdate() {
-        double botHeading = imu.getHeading();
         double y = Mercurial.gamepad1().leftStickY().state();
         double x = Mercurial.gamepad1().leftStickX().state();
         double z = Mercurial.gamepad1().rightStickX().state();
-        double theta = Math.atan2(y,x);
-        double power = Math.hypot(x,y);
-        double sin = Math.sin((theta - botHeading) - Math.PI/4); //
-        double cos = Math.cos((theta - botHeading) - Math.PI/4);
-        double max = Math.max(Math.abs(sin), Math.abs(cos));
+        if (driveFieldCentric) {
+            imu.update();
+            double botHeading = imu.getHeading();
+            double rotX = 1.1 * (x * Math.cos(-botHeading) - y * Math.sin(-botHeading));
+            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-        motor[0].setPower(power * cos/max + z);
-        motor[1].setPower(power * sin/max + z);
-        motor[2].setPower(power * sin/max - z);
-        motor[3].setPower(power * cos/max - z);
+            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(z), 1);
 
-        if ((power + Math.abs(z)) > 1) {for (DcMotor thismotor : motor) {thismotor.setPower(thismotor.getPower()/power + Math.abs(z));}}
+            motor[0].setPower((rotY + rotX + z) / denominator);
+            motor[1].setPower((rotY - rotX - z) / denominator);
+            motor[2].setPower((rotY - rotX + z) / denominator);
+            motor[3].setPower((rotY + rotX - z) / denominator);
+        }
+        else {
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(z), 1);
+
+            motor[0].setPower((y + x + z) / denominator);
+            motor[1].setPower((y - x - z) / denominator);
+            motor[2].setPower((y - x + z) / denominator);
+            motor[3].setPower((y + x - z) / denominator);
+        }
     }
 }
